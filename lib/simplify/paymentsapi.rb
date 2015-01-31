@@ -233,6 +233,7 @@ module Simplify
            raise ApiException.new("Unknown error", nil, nil)
         end
 
+        p "Error: #{e.inspect}"
         if e.response.code == @@HTTP_REDIRECTED
             raise BadRequestException.new("Unexpected response code returned from the API, have you got the correct URL?", e.response.code, errorData)
         elsif e.response.code == @@HTTP_BAD_REQUEST
