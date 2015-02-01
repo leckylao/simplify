@@ -118,7 +118,6 @@ class Payment < Hash
     # auth:: Authentication information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  For backwards compatibility the public and private keys may be passed instead of the authentication object.
     # Returns a Payment object.
     def self.find(id, *auth)
-
         auth_obj = Simplify::PaymentsApi.create_auth_object(auth)
         h = Simplify::PaymentsApi.execute("payment", 'show', {"id" => id}, auth_obj)
         obj = Payment.new()
@@ -130,10 +129,18 @@ class Payment < Hash
     # Updates this object
     #
     # The properties that can be updated:
-        def update()
-          h = Simplify::PaymentsApi.execute("payment", 'update', self, self.authentication)
-          self.merge!(h)
-          self
+    def update()
+      h = Simplify::PaymentsApi.execute("payment", 'update', self, self.authentication)
+      self.merge!(h)
+      self
+    end
+
+    def success?
+      if self['paymentStatus'] == 'APPROVED'
+        true
+      else
+        false
+      end
     end
 
 end
